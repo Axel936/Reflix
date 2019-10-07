@@ -62,80 +62,69 @@ class Calalog extends Component {
             "Basically the same as the original, except now Hermi-- Emma Wattson plays Belle, fittingly so some would say, given how actively progressive she is regarding women's rights. Rumor has it that in the bonus scenes she whips out a wand and turns Gaston into a toad, but in order to watch those scenes you need to recite a certain incantation."
         }
       ],
-      rentedMovies: [
-
-      ],
+      rentedMovies: [],
       budget: 20
     };
-  
   }
-  addMovie = (e) => {
-    let movieName = e.target.innerText.replace(/^Rent (.*$)/, '$1')
-    let movie = this.state.movies.find(m => m.title == movieName)
-    
-	   if (this.state.budget - movie.cost >= 0 ){
-		  if (!this.state.rentedMovies.find(movie => movie.title == movieName)){
-        this.setState({budget: this.state.budget -+ 10})
-			  let rentedMovies = [...this.state.rentedMovies]
-			  rentedMovies.push(movie)
-			  this.setState({rentedMovies})
-		  }
-	  } else {
-      alert("you done have enough fund to rent that movie")
-    }
-  }
+  addMovie = e => {
+    let movieName = e.target.innerText.replace(/^Rent (.*$)/, "$1");
+    let movie = this.state.movies.find(m => m.title == movieName);
 
-  delMovie = (e) => {
-    let movieName = e.target.innerText.replace(/^Unrent (.*$)/, '$1')
-    
-    let rentedMovies = [...this.state.rentedMovies]
-    for (const index in rentedMovies) {
-        const movie = rentedMovies[index];
-        if (movie.title === movieName) {
-          rentedMovies.splice(index,1)
-        }
-        
+
+    // if budget allows and movie not rented, rent movie, if not, alert message
+    if (this.state.budget - movie.cost >= 0) {
+      if (!this.state.rentedMovies.find(movie => movie.title == movieName)) {
+        this.setState({ budget: this.state.budget -= movie.cost });
+        let rentedMovies = [...this.state.rentedMovies];
+        rentedMovies.push(movie);
+        this.setState({ rentedMovies });
       }
-      this.setState({rentedMovies})
+    } else {
+      alert("you done have enough fund to rent that movie");
     }
-  
+  };
 
+  delMovie = e => {
+    let movieName = e.target.innerText.replace(/^Unrent (.*$)/, "$1");
+    let rentedMovies = [...this.state.rentedMovies];
+
+    
+    for (const index in rentedMovies) {
+      const movie = rentedMovies[index];
+      if (movie.title === movieName) {
+        rentedMovies.splice(index, 1);
+        this.setState({ budget: this.state.budget += movie.cost });
+      }
+    }
+    this.setState({ rentedMovies });
+  };
 
   render() {
     return (
       <div>
-        
         <br />
-        <div className="rented">
-        {this.state.rentedMovies.map(movie => (
-          <div>
-          <Link to={`${this.props.match.url}/${movie.id}`}>
-            <Movee movie={movie} addMovie={this.props.addMovie} />
-          </Link>
-          <button onClick={this.delMovie}>Unrent {movie.title}</button>
-        
-          <br/>
-          <br/>
-
-        </div>
-        
-        ))}
-      -------------------------------------
-        </div>
-        <div className="movies-con">
-          {this.state.movies.map(movie => (
-            <div>
-            <div>Movies</div>
+        <div className="movies-container rented">
+          {this.state.rentedMovies.map(movie => (
             <div>
               <Link to={`${this.props.match.url}/${movie.id}`}>
                 <Movee movie={movie} addMovie={this.props.addMovie} />
               </Link>
-              <button onClick={this.addMovie}>Rent {movie.title}</button>
-              <br/>
-              <br/>
+              <button onClick={this.delMovie}>Unrent {movie.title}</button>
 
+              <br />
+              <br />
             </div>
+          ))}
+        </div>
+        <div className="movies-container">
+          {this.state.movies.map(movie => (
+            <div>
+              <div>Movies</div>
 
+              <Link to={`${this.props.match.url}/${movie.id}`}>
+                <Movee movie={movie} addMovie={this.props.addMovie} />
+              </Link>
+              <button onClick={this.addMovie}>Rent {movie.title}</button>
             </div>
           ))}
         </div>

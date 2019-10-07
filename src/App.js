@@ -47,17 +47,16 @@ class App extends Component {
           
     }
 }
-//  addMovie = () => {
-// //  let movies = [...this.state.users.find(p => p.name == "Axel").movies]
-// //  movies.push("new movie")
-//  this.setState({[this.state.users.find(p => p.name == "Axel").movies]: ["axel"]})
-//   }
-  addMovie = async (userID, movieID) => {
+
+  addMovie = (userID, movieID) => {
 
     let users = [...this.state.users]
-    users.find(u => u.id == userID).movies.push(this.state.movies.find(m => m.id == movieID))
-
-    this.setState({users})
+    let user = users.
+                  find(user => user.id == userID)
+    let movie = this.state.movies
+                  .find(movie => movie.id == movieID)
+    user.movies.push(movie)
+    this.setState({users})  
   }
 
 
