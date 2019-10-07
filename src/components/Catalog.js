@@ -8,6 +8,7 @@ class Calalog extends Component {
     this.state = {
       movies: [
         {
+          cost: 10,
           id: 0,
           isRented: false,
           title: "Tarzan",
@@ -18,6 +19,7 @@ class Calalog extends Component {
             "Tarzan was born into wealth but raised into incredible misfortune. Shiprweck, parents mauled by a jaguar. Luckily, a troop of gorillas took him in, but the Big Daddy gorilla never took a liking to him. That is, until the end when it's too late. Why is it too late? Watch and find out."
         },
         {
+          cost: 10,
           id: 1,
           isRented: false,
           title: "The Lion King",
@@ -29,6 +31,7 @@ class Calalog extends Component {
         },
         {
           id: 2,
+          cost: 10,
           isRented: false,
           title: "Beauty and the Beast",
           year: 1991,
@@ -38,6 +41,7 @@ class Calalog extends Component {
             "A kickass woman named Belle who does not succumb to social norms gets crap from a bunch of village idiots, chief amongst them a total tool named Gaston. Belle shows everyone how great she is when she turns a beast (not Gaston) into a man. Love ensues, but then the villagers fall trap to severe group-think mentality led by the main tool himself."
         },
         {
+          cost: 10,
           id: 3,
           isRented: false,
           title: "The Sword in the Stone",
@@ -47,6 +51,7 @@ class Calalog extends Component {
             "Arthur is a young boy who just wants to be a knight's squire. Alas, he is dubbed 'Wart' early on, and it was all downhill from there for a while. On a hunting trip he falls in on Merlin, literally. Merlin is a possibly-mentally-unstable-and-ethically-dubious Wizard that turns Arthur into a literate, at-one-point harassed squirrel. Watch to find out what the heck that means."
         },
         {
+          cost: 10,
           id: 4,
           isRented: false,
           title: "Beauty and the Beast",
@@ -59,16 +64,25 @@ class Calalog extends Component {
       ],
       rentedMovies: [
 
-      ]
+      ],
+      budget: 20
     };
   
   }
   addMovie = (e) => {
     let movieName = e.target.innerText.replace(/^Rent (.*$)/, '$1')
+    let movie = this.state.movies.find(m => m.title == movieName)
     
-    let rentedMovies = [...this.state.rentedMovies]
-    rentedMovies.push(this.state.movies.find(m => m.title === movieName))
-    this.setState({rentedMovies})
+	   if (this.state.budget - movie.cost >= 0 ){
+		  if (!this.state.rentedMovies.find(movie => movie.title == movieName)){
+        this.setState({budget: this.state.budget -+ 10})
+			  let rentedMovies = [...this.state.rentedMovies]
+			  rentedMovies.push(movie)
+			  this.setState({rentedMovies})
+		  }
+	  } else {
+      alert("you done have enough fund to rent that movie")
+    }
   }
 
   delMovie = (e) => {
