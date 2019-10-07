@@ -63,7 +63,7 @@ class Calalog extends Component {
         }
       ],
       rentedMovies: [],
-      budget: 20
+      budget: 30
     };
   }
   addMovie = e => {
@@ -102,7 +102,7 @@ class Calalog extends Component {
   render() {
     return (
       <div>
-        <br />
+          <div className="budget">Your Budget{this.state.budget}</div>
         <div className="movies-container rented">
           {this.state.rentedMovies.map(movie => (
             <div>
