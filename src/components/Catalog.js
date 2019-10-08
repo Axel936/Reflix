@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Movee from "./Movee";
+import Movies from "./Movies";
 
 class Calalog extends Component {
   constructor() {
@@ -70,11 +71,10 @@ class Calalog extends Component {
     let movieName = e.target.innerText.replace(/^Rent (.*$)/, "$1");
     let movie = this.state.movies.find(m => m.title == movieName);
 
-
     // if budget allows and movie not rented, rent movie, if not, alert message
     if (this.state.budget - movie.cost >= 0) {
       if (!this.state.rentedMovies.find(movie => movie.title == movieName)) {
-        this.setState({ budget: this.state.budget -= movie.cost });
+        this.setState({ budget: (this.state.budget -= movie.cost) });
         let rentedMovies = [...this.state.rentedMovies];
         rentedMovies.push(movie);
         this.setState({ rentedMovies });
@@ -85,15 +85,14 @@ class Calalog extends Component {
   };
 
   delMovie = e => {
-    let movieName = e.target.innerText.replace(/^Unrent (.*$)/, "$1");
+    let movieName = e.target.innerText.replace(/^Return (.*$)/, "$1");
     let rentedMovies = [...this.state.rentedMovies];
 
-    
     for (const index in rentedMovies) {
       const movie = rentedMovies[index];
       if (movie.title === movieName) {
         rentedMovies.splice(index, 1);
-        this.setState({ budget: this.state.budget += movie.cost });
+        this.setState({ budget: (this.state.budget += movie.cost) });
       }
     }
     this.setState({ rentedMovies });
@@ -101,33 +100,23 @@ class Calalog extends Component {
 
   render() {
     return (
-      <div>
-          <div className="budget">Your Budget{this.state.budget}</div>
-        <div className="movies-container rented">
-          {this.state.rentedMovies.map(movie => (
-            <div>
-              <Link to={`${this.props.match.url}/${movie.id}`}>
-                <Movee movie={movie} addMovie={this.props.addMovie} />
-              </Link>
-              <button onClick={this.delMovie}>Unrent {movie.title}</button>
+      <div className="catalog">
+        <span className="budget">Your Budget{this.state.budget}</span>
 
-              <br />
-              <br />
-            </div>
-          ))}
-        </div>
-        <div className="movies-container">
-          {this.state.movies.map(movie => (
-            <div>
-              <div>Movies</div>
+        <Movies 
+                array={this.state.rentedMovies}
+                url={this.props.match.url}
+                onClick = {this.delMovie}
+                h1='rented movies'
+                buttonHtml = "Return"
 
-              <Link to={`${this.props.match.url}/${movie.id}`}>
-                <Movee movie={movie} addMovie={this.props.addMovie} />
-              </Link>
-              <button onClick={this.addMovie}>Rent {movie.title}</button>
-            </div>
-          ))}
-        </div>
+            />
+        <Movies array={this.state.movies}
+                url={this.props.match.url}
+                onClick={this.addMovie}
+                h1='movies'
+                buttonHtml = "Rent"
+            />
       </div>
     );
   }

@@ -19,5 +19,6 @@ span {
   color: random;
 }
 .movies-container{
-  display: flex;
+  display: grid;
+  
 }
