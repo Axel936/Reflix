@@ -101,7 +101,7 @@ class Calalog extends Component {
   render() {
     return (
       <div className="catalog">
-        <span className="budget">Your Budget{this.state.budget}</span>
+        <span className="budget">Your Budget is ${this.state.budget}</span>
 
         <Movies 
                 array={this.state.rentedMovies}
